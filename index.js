@@ -2,7 +2,12 @@ import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
 import catRouter from "./src/routes/cats.js";
+import userRouter from "./src/routes/user.js";
+import userSchema from "./src/models/user.js";
+import cors from "cors";
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -16,9 +21,10 @@ mongoose
   });
 
 app.use(catRouter);
+app.use(userRouter);
 
-app.get("/cats", function (req, res) {
-  res.send("Hello World");
+app.use((req, res) => {
+  return res.status(404).json({ message: "This endpoint does not exist" });
 });
 
 app.listen(process.env.PORT, () => {
